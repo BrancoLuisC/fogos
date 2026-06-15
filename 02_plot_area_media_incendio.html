@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Área média ardida por incêndio rural</title>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <style>
+    :root {
+      --azul-ubi: #00246b;
+      --laranja-ubi: #ff5c00;
+      --texto: #1b2430;
+      --muted: #5e6a7a;
+      --fundo: #f7f8fb;
+      --card: #ffffff;
+      --linha: #d9dee7;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--texto);
+    }
+    .wrap {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 100vh;
+      padding: 12px;
+      background: transparent;
+    }
+    .card {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: calc(100vh - 24px);
+      background: var(--card);
+      border: 1px solid var(--linha);
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(0, 36, 107, 0.08);
+      padding: 18px 18px 8px 18px;
+    }
+    .title {
+      font-size: 20px;
+      line-height: 1.25;
+      font-weight: 700;
+      margin: 0 0 4px 0;
+      color: var(--azul-ubi);
+    }
+    .subtitle {
+      font-size: 13px;
+      line-height: 1.35;
+      margin: 0 0 8px 0;
+      color: var(--muted);
+    }
+    .chart {
+      width: 100%;
+      height: 520px;
+    }
+    .note {
+      margin: 2px 0 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.3;
+    }
+    @media (max-width: 700px) {
+      .card { padding: 12px 10px 6px 10px; border-radius: 10px; }
+      .title { font-size: 16px; }
+      .subtitle { font-size: 12px; }
+      .chart { height: 460px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1 class="title">Área média ardida por incêndio rural</h1>
+      <p class="subtitle">Portugal, 2001–2025. A linha azul representa hectares ardidos por incêndio; a linha laranja apresenta a tendência linear.</p>
+      <div id="grafico" class="chart"></div>
+      <p class="note">Passe o cursor sobre o gráfico para consultar os valores. A legenda permite ativar/desativar séries.</p>
+    </div>
+  </div>
+  <script>
+    
+const dados = [{"Ano": 2001, "Area_ha": 117420.4, "Area_km2": 1174.2, "Incendios": 28915, "Ignicoes_milhares": 28.915, "Area_ha_por_incendio": 4.1, "Trend_area_ha_por_incendio": 2.546}, {"Ano": 2002, "Area_ha": 130849.1, "Area_km2": 1308.5, "Incendios": 28993, "Ignicoes_milhares": 28.993, "Area_ha_por_incendio": 4.5, "Trend_area_ha_por_incendio": 2.992}, {"Ano": 2003, "Area_ha": 471750.0, "Area_km2": 4717.5, "Incendios": 28087, "Ignicoes_milhares": 28.087, "Area_ha_por_incendio": 16.8, "Trend_area_ha_por_incendio": 3.439}, {"Ano": 2004, "Area_ha": 151369.9, "Area_km2": 1513.7, "Incendios": 27829, "Ignicoes_milhares": 27.829, "Area_ha_por_incendio": 5.4, "Trend_area_ha_por_incendio": 3.885}, {"Ano": 2005, "Area_ha": 346717.8, "Area_km2": 3467.2, "Incendios": 41689, "Ignicoes_milhares": 41.689, "Area_ha_por_incendio": 8.3, "Trend_area_ha_por_incendio": 4.332}, {"Ano": 2006, "Area_ha": 83705.9, "Area_km2": 837.1, "Incendios": 24243, "Ignicoes_milhares": 24.243, "Area_ha_por_incendio": 3.5, "Trend_area_ha_por_incendio": 4.778}, {"Ano": 2007, "Area_ha": 36412.5, "Area_km2": 364.1, "Incendios": 25133, "Ignicoes_milhares": 25.133, "Area_ha_por_incendio": 1.4, "Trend_area_ha_por_incendio": 5.225}, {"Ano": 2008, "Area_ha": 19897.2, "Area_km2": 199.0, "Incendios": 18958, "Ignicoes_milhares": 18.958, "Area_ha_por_incendio": 1.0, "Trend_area_ha_por_incendio": 5.671}, {"Ano": 2009, "Area_ha": 92125.7, "Area_km2": 921.3, "Incendios": 29783, "Ignicoes_milhares": 29.783, "Area_ha_por_incendio": 3.1, "Trend_area_ha_por_incendio": 6.118}, {"Ano": 2010, "Area_ha": 140953.2, "Area_km2": 1409.5, "Incendios": 26113, "Ignicoes_milhares": 26.113, "Area_ha_por_incendio": 5.4, "Trend_area_ha_por_incendio": 6.564}, {"Ano": 2011, "Area_ha": 77103.5, "Area_km2": 771.0, "Incendios": 29782, "Ignicoes_milhares": 29.782, "Area_ha_por_incendio": 2.6, "Trend_area_ha_por_incendio": 7.011}, {"Ano": 2012, "Area_ha": 117984.8, "Area_km2": 1179.8, "Incendios": 25352, "Ignicoes_milhares": 25.352, "Area_ha_por_incendio": 4.7, "Trend_area_ha_por_incendio": 7.457}, {"Ano": 2013, "Area_ha": 160387.7, "Area_km2": 1603.9, "Incendios": 23129, "Ignicoes_milhares": 23.129, "Area_ha_por_incendio": 6.9, "Trend_area_ha_por_incendio": 7.904}, {"Ano": 2014, "Area_ha": 22819.8, "Area_km2": 228.2, "Incendios": 9388, "Ignicoes_milhares": 9.388, "Area_ha_por_incendio": 2.4, "Trend_area_ha_por_incendio": 8.351}, {"Ano": 2015, "Area_ha": 67200.2, "Area_km2": 672.0, "Incendios": 19643, "Ignicoes_milhares": 19.643, "Area_ha_por_incendio": 3.4, "Trend_area_ha_por_incendio": 8.797}, {"Ano": 2016, "Area_ha": 167807.4, "Area_km2": 1678.1, "Incendios": 16104, "Ignicoes_milhares": 16.104, "Area_ha_por_incendio": 10.4, "Trend_area_ha_por_incendio": 9.244}, {"Ano": 2017, "Area_ha": 539921.0, "Area_km2": 5399.2, "Incendios": 21006, "Ignicoes_milhares": 21.006, "Area_ha_por_incendio": 25.7, "Trend_area_ha_por_incendio": 9.69}, {"Ano": 2018, "Area_ha": 44577.5, "Area_km2": 445.8, "Incendios": 12273, "Ignicoes_milhares": 12.273, "Area_ha_por_incendio": 3.6, "Trend_area_ha_por_incendio": 10.137}, {"Ano": 2019, "Area_ha": 42083.9, "Area_km2": 420.8, "Incendios": 10832, "Ignicoes_milhares": 10.832, "Area_ha_por_incendio": 3.9, "Trend_area_ha_por_incendio": 10.583}, {"Ano": 2020, "Area_ha": 67169.9, "Area_km2": 671.7, "Incendios": 9619, "Ignicoes_milhares": 9.619, "Area_ha_por_incendio": 7.0, "Trend_area_ha_por_incendio": 11.03}, {"Ano": 2021, "Area_ha": 28359.9, "Area_km2": 283.6, "Incendios": 8186, "Ignicoes_milhares": 8.186, "Area_ha_por_incendio": 3.5, "Trend_area_ha_por_incendio": 11.476}, {"Ano": 2022, "Area_ha": 110097.1, "Area_km2": 1101.0, "Incendios": 10390, "Ignicoes_milhares": 10.39, "Area_ha_por_incendio": 10.6, "Trend_area_ha_por_incendio": 11.923}, {"Ano": 2023, "Area_ha": 34509.2, "Area_km2": 345.1, "Incendios": 7523, "Ignicoes_milhares": 7.523, "Area_ha_por_incendio": 4.6, "Trend_area_ha_por_incendio": 12.369}, {"Ano": 2024, "Area_ha": 137651.4, "Area_km2": 1376.5, "Incendios": 6255, "Ignicoes_milhares": 6.255, "Area_ha_por_incendio": 22.0, "Trend_area_ha_por_incendio": 12.816}, {"Ano": 2025, "Area_ha": 270695.1, "Area_km2": 2707.0, "Incendios": 8252, "Ignicoes_milhares": 8.252, "Area_ha_por_incendio": 32.8, "Trend_area_ha_por_incendio": 13.262}];
+
+const anos = dados.map(d => d.Ano);
+const areaMedia = dados.map(d => d.Area_ha_por_incendio);
+const tendencia = dados.map(d => d.Trend_area_ha_por_incendio);
+const areaHa = dados.map(d => d.Area_ha);
+const incendios = dados.map(d => d.Incendios);
+
+const azul = '#00246b';
+const laranja = '#ff5c00';
+
+const linha = {
+  x: anos,
+  y: areaMedia,
+  type: 'scatter',
+  mode: 'lines+markers',
+  name: 'Área média por incêndio',
+  line: { color: azul, width: 2.3 },
+  marker: { size: 7, color: azul, line: { color: '#ffffff', width: 1 } },
+  customdata: areaHa.map((v, i) => [v, incendios[i]]),
+  hovertemplate:
+    '<b>%{x}</b><br>' +
+    'Área média: %{y:.1f} ha/incêndio<br>' +
+    'Área ardida: %{customdata[0]:,.1f} ha<br>' +
+    'N.º incêndios: %{customdata[1]:,.0f}<extra></extra>'
+};
+
+const trend = {
+  x: anos,
+  y: tendencia,
+  type: 'scatter',
+  mode: 'lines',
+  name: 'Tendência linear',
+  line: { color: laranja, width: 2, dash: 'solid' },
+  hovertemplate:
+    '<b>%{x}</b><br>' +
+    'Tendência: %{y:.1f} ha/incêndio<extra></extra>'
+};
+
+const layout = {
+  margin: { l: 68, r: 26, t: 18, b: 58 },
+  paper_bgcolor: 'rgba(255,255,255,0)',
+  plot_bgcolor: 'rgba(255,255,255,0)',
+  hovermode: 'x unified',
+  legend: {
+    orientation: 'h',
+    x: 0.5,
+    xanchor: 'center',
+    y: -0.18,
+    font: { size: 12 }
+  },
+  xaxis: {
+    title: '',
+    tickmode: 'array',
+    tickvals: anos,
+    tickangle: -45,
+    showgrid: false,
+    zeroline: false,
+    tickfont: { size: 11 }
+  },
+  yaxis: {
+    title: 'Área média (ha/incêndio)',
+    rangemode: 'tozero',
+    gridcolor: '#edf0f5',
+    zerolinecolor: '#d9dee7',
+    titlefont: { color: azul },
+    tickfont: { color: azul }
+  },
+  font: {
+    family: 'Arial, Helvetica, sans-serif',
+    color: '#1b2430'
+  }
+};
+
+const config = {
+  responsive: true,
+  displaylogo: false,
+  modeBarButtonsToRemove: ['lasso2d', 'select2d']
+};
+
+Plotly.newPlot('grafico', [linha, trend], layout, config);
+
+  </script>
+</body>
+</html>
